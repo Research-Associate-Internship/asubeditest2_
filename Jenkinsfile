@@ -2,6 +2,9 @@ pipeline {
     agent {
         label 'testnode2'
     }
+    environment {
+        SNYK_TOKEN = credentials('asubedisnyktoken') 
+        
 
     stages {
         stage('checkout') {
@@ -16,10 +19,15 @@ pipeline {
         }
         stage('sast-testing') {
             steps {
-            snykSecurity failOnIssues: false, projectName: 'juice-shop', snykInstallation: 'SnykJ', snykTokenId: 'as-snyk'
+                sh """
+                #set +x
+                snyk auth ${env.SNYK_TOKEN}
+                #snyk test --json | snyk-to-html > /home/ubuntu/Snyk_Report_${BUILD_ID}.html
+                """
+            }
         }
         }
-        stage('run-application') {
+        /*stage('run-application') {
             steps {
                 sh 'docker run -d -p 80:3000 --name owasp bkimminich/juice-shop'
             }
@@ -35,9 +43,9 @@ pipeline {
                 sh 'docker stop $(docker ps -q)'
                 sh 'docker rm $(docker ps -a -q)'
             }
-        }
-    }
-    post {
+        }*/
+    /*}*/
+    /*post {
         always {
             publishHTML(target: [
                 allowMissing:false,
@@ -49,4 +57,4 @@ pipeline {
                 ])
         }
     }
-}
+}*/
