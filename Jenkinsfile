@@ -24,9 +24,11 @@ pipeline {
                 snyk auth ${env.SNYK_TOKEN}
                 #snyk test --json | snyk-to-html > /home/ubuntu/Snyk_Report_${BUILD_ID}.html
                 """
+                }
             }
         }
-        }
+        } 
+        
         /*stage('run-application') {
             steps {
                 sh 'docker run -d -p 80:3000 --name owasp bkimminich/juice-shop'
