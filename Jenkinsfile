@@ -4,7 +4,7 @@ pipeline {
     }
     environment {
         SNYK_TOKEN = credentials('asubedisnyktoken') 
-        
+    }
 
     stages {
         stage('checkout') {
